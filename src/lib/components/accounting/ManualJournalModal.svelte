@@ -1,5 +1,5 @@
 <script lang="ts">
-	import FormField from './FormField.svelte';
+	import FormField from '$lib/components/site/FormField.svelte';
 	import JournalLineInputs from './JournalLineInputs.svelte';
 	import FormErrorNote from '$lib/components/site/FormErrorNote.svelte';
 	import Modal from '$lib/components/site/Modal.svelte';

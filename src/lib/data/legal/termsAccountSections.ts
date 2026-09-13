@@ -5,7 +5,7 @@ export const termsAccountSections: LegalSection[] = [
 	{
 		heading: 'Who we are',
 		paragraphs: [
-			`Your Books Today is operated by ${companyDetails.legalName}, a company registered in England and Wales under number ${companyDetails.registrationNumber}, with its registered office at ${companyDetails.registeredAddress} (“we”, “us”). You can reach us at ${companyDetails.consultingEmail}.`,
+			`Your Books Today is operated by ${companyDetails.legalName}, a company registered in England and Wales under number ${companyDetails.registrationNumber}, with its registered office at ${companyDetails.registeredAddress} (“we”, “us”). You can reach us at ${companyDetails.contactEmail}.`,
 			'These terms govern your use of yourbooks.today and every part of the service: accounts and credits, knowledge bases and the brains inside them, chatbots, the client portal, and the API and MCP server. By creating an account, accepting a chatbot invitation, or signing in to the client portal you agree to them. If you are using the service on behalf of a business, you confirm you have authority to bind that business.'
 		]
 	},

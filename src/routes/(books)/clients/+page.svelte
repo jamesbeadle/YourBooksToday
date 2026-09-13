@@ -2,7 +2,7 @@
 	import AccountingPageHeader from '$lib/components/accounting/AccountingPageHeader.svelte';
 	import ClientFormFields from '$lib/components/accounting/ClientFormFields.svelte';
 	import ClientRow from '$lib/components/accounting/ClientRow.svelte';
-	import EmptyState from '$lib/components/accounting/EmptyState.svelte';
+	import EmptyState from '$lib/components/site/EmptyState.svelte';
 	import FormErrorNote from '$lib/components/site/FormErrorNote.svelte';
 	import Modal from '$lib/components/site/Modal.svelte';
 	import SubmitButton from '$lib/components/site/SubmitButton.svelte';

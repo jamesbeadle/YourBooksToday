@@ -1,5 +1,5 @@
 <script lang="ts">
-	import EmptyState from './EmptyState.svelte';
+	import EmptyState from '$lib/components/site/EmptyState.svelte';
 	import InvoiceStatusBadge from './InvoiceStatusBadge.svelte';
 	import { formatIsoDate } from '$lib/data/accounting/accountingPeriods';
 	import { formatMoney } from '$lib/data/accounting/money';

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import AccountSelect from './AccountSelect.svelte';
 	import CostCentreSelect from './CostCentreSelect.svelte';
-	import FormField from './FormField.svelte';
+	import FormField from '$lib/components/site/FormField.svelte';
 	import FormErrorNote from '$lib/components/site/FormErrorNote.svelte';
 	import Modal from '$lib/components/site/Modal.svelte';
 	import SubmitButton from '$lib/components/site/SubmitButton.svelte';

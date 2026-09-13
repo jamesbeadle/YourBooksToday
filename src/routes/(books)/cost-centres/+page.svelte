@@ -2,7 +2,7 @@
 	import AccountingPageHeader from '$lib/components/accounting/AccountingPageHeader.svelte';
 	import ActionMessage from '$lib/components/accounting/ActionMessage.svelte';
 	import ArchiveToggleRow from '$lib/components/accounting/ArchiveToggleRow.svelte';
-	import EmptyState from '$lib/components/accounting/EmptyState.svelte';
+	import EmptyState from '$lib/components/site/EmptyState.svelte';
 	import NewNamedItemForm from '$lib/components/accounting/NewNamedItemForm.svelte';
 
 	let { data, form } = $props();

@@ -31,7 +31,7 @@ export const privacySharingSections: LegalSection[] = [
 			'You may be reading this because someone else brought you here: a manager invited you to a chatbot, or your business named you as a contact in the client portal. This section is for you.',
 			'If you were invited to a chatbot, we hold the email address the manager gave us, your display name if you set one, and every question you ask and answer you receive. The manager who funds the chatbot can see those questions and answers, including the ones the chatbot could not answer. Your questions are sent to Anthropic to be answered, as described above. The manager is responsible for telling you this before inviting you; if they have not, ask them.',
 			'If you were named as a client contact, we hold your name, email address, phone number and role as your business gave them to us, and the requests and messages you send through the portal. Our staff and the other contacts at your business can see them.',
-			`In both cases you have the same rights as any account holder, set out below. If you would rather not be a member or a contact, tell the manager or your business and they can remove you — or write to ${companyDetails.consultingEmail} and we will.`
+			`In both cases you have the same rights as any account holder, set out below. If you would rather not be a member or a contact, tell the manager or your business and they can remove you — or write to ${companyDetails.contactEmail} and we will.`
 		]
 	}
 ];

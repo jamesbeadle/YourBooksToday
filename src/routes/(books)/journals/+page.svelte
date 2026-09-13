@@ -2,7 +2,7 @@
 	import AccountingPageHeader from '$lib/components/accounting/AccountingPageHeader.svelte';
 	import AccrualModal from '$lib/components/accounting/AccrualModal.svelte';
 	import ActionMessage from '$lib/components/accounting/ActionMessage.svelte';
-	import EmptyState from '$lib/components/accounting/EmptyState.svelte';
+	import EmptyState from '$lib/components/site/EmptyState.svelte';
 	import JournalRow from '$lib/components/accounting/JournalRow.svelte';
 	import ManualJournalModal from '$lib/components/accounting/ManualJournalModal.svelte';
 	import PrepaymentReleaseModal from '$lib/components/accounting/PrepaymentReleaseModal.svelte';

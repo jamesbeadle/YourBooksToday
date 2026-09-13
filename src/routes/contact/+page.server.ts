@@ -5,7 +5,7 @@ import { readWebsiteEnquiry } from '$lib/server/enquiries/websiteEnquiry';
 import { companyDetails } from '$lib/data/companyDetails';
 import type { Actions } from './$types';
 
-const deliveryFailedMessage = `We could not send your message just now — please email ${companyDetails.consultingEmail} instead.`;
+const deliveryFailedMessage = `We could not send your message just now — please email ${companyDetails.contactEmail} instead.`;
 const tenMinutesInMilliseconds = 10 * 60 * 1000;
 const enquiriesPerAddress = addressRateLimit({
 	allowance: 5,

@@ -5,7 +5,7 @@ export const privacyCollectionSections: LegalSection[] = [
 	{
 		heading: 'Who we are',
 		paragraphs: [
-			`${companyDetails.legalName}, a company registered in England and Wales under number ${companyDetails.registrationNumber} with its registered office at ${companyDetails.registeredAddress}, is the data controller for the personal information handled by yourbooks.today and by our consultancy. For anything in this statement, contact ${companyDetails.consultingEmail}.`,
+			`${companyDetails.legalName}, a company registered in England and Wales under number ${companyDetails.registrationNumber} with its registered office at ${companyDetails.registeredAddress}, is the data controller for the personal information handled by yourbooks.today and by our consultancy. For anything in this statement, contact ${companyDetails.contactEmail}.`,
 			'The short version of our promise, stated once here and repeated wherever it matters: your knowledge powers your tools and nothing else. It is never sold, never pooled, never used to train anything for anyone else, and it leaves when you do.'
 		]
 	},

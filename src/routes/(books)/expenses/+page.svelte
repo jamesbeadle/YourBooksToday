@@ -1,7 +1,7 @@
 <script lang="ts">
 	import AccountingPageHeader from '$lib/components/accounting/AccountingPageHeader.svelte';
 	import ActionMessage from '$lib/components/accounting/ActionMessage.svelte';
-	import EmptyState from '$lib/components/accounting/EmptyState.svelte';
+	import EmptyState from '$lib/components/site/EmptyState.svelte';
 	import ExpenseRow from '$lib/components/accounting/ExpenseRow.svelte';
 	import NewExpenseModal from '$lib/components/accounting/NewExpenseModal.svelte';
 	import { primaryButtonClasses } from '$lib/components/accounting/accountingFormStyles';

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import FormField from './FormField.svelte';
+	import FormField from '$lib/components/site/FormField.svelte';
 	import { inputClasses } from './accountingFormStyles';
 	import type { Client } from '$lib/server/accounting/getClients';
 

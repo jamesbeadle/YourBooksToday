@@ -1,6 +1,6 @@
 <script lang="ts">
 	import BankDetailsFields from './BankDetailsFields.svelte';
-	import FormField from './FormField.svelte';
+	import FormField from '$lib/components/site/FormField.svelte';
 	import FormErrorNote from '$lib/components/site/FormErrorNote.svelte';
 	import SubmitButton from '$lib/components/site/SubmitButton.svelte';
 	import { enhance } from '$app/forms';

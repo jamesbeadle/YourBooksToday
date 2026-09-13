@@ -8,21 +8,16 @@
 		<div class="flex flex-col gap-1">
 			<div class="flex items-center gap-3">
 				<BrandWordmark fontSize={18} />
-				<p class="text-sm text-chalk/60">
-					Your Books Today — consultants who know your business.
-				</p>
+				<p class="text-sm text-chalk/60">Your Books Today — books that balance.</p>
 			</div>
 			<a
-				href={`mailto:${companyDetails.consultingEmail}`}
+				href={`mailto:${companyDetails.contactEmail}`}
 				class="text-sm text-chalk/60 transition hover:text-chalk"
 			>
-				{companyDetails.consultingEmail}
+				{companyDetails.contactEmail}
 			</a>
 		</div>
 		<div class="flex flex-wrap items-center gap-6">
-			<a href="/vision" class="text-sm text-chalk/60 transition hover:text-chalk">
-				What we're building
-			</a>
 			<a href="/contact" class="text-sm text-chalk/60 transition hover:text-chalk">Contact</a>
 			<a href="/terms" class="text-sm text-chalk/60 transition hover:text-chalk">
 				Terms of service

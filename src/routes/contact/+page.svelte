@@ -29,10 +29,10 @@
 		<p class="max-w-prose text-chalk/70">
 			Prefer email? Write to
 			<a
-				href={`mailto:${companyDetails.consultingEmail}`}
+				href={`mailto:${companyDetails.contactEmail}`}
 				class="text-chalk underline underline-offset-4 transition hover:text-signal"
 			>
-				{companyDetails.consultingEmail}
+				{companyDetails.contactEmail}
 			</a>
 		</p>
 	</div>

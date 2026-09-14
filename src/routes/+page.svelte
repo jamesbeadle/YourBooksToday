@@ -1,13 +1,15 @@
 <script lang="ts">
+	import AlwaysOnSection from '$lib/components/home/AlwaysOnSection.svelte';
 	import AskYourBooksSection from '$lib/components/home/AskYourBooksSection.svelte';
 	import BenefitsSection from '$lib/components/home/BenefitsSection.svelte';
-	import FeaturesSection from '$lib/components/home/FeaturesSection.svelte';
+	import CapabilitiesSection from '$lib/components/home/CapabilitiesSection.svelte';
 	import HeroSection from '$lib/components/home/HeroSection.svelte';
+	import HowItWorksSection from '$lib/components/home/HowItWorksSection.svelte';
 	import { companyDetails } from '$lib/data/companyDetails';
 
-	const pageTitle = 'Your Books Today — books that balance, books you can ask';
+	const pageTitle = 'Your Books Today — books that keep themselves';
 	const pageDescription =
-		'Double-entry bookkeeping for a small business. Invoices, expenses, journals, profit and loss and a balance sheet, kept in one ledger and readable from end to end.';
+		'An accounting platform for businesses of any size. Bills, receipts and bank lines file themselves on a schedule, the ledger underneath is proper double entry, and you ask it anything in the conversation you are already having.';
 	const shareImageUrl = `${companyDetails.websiteUrl}/favicon.svg`;
 </script>
 
@@ -22,6 +24,8 @@
 </svelte:head>
 
 <HeroSection />
-<FeaturesSection />
+<HowItWorksSection />
+<CapabilitiesSection />
 <AskYourBooksSection />
+<AlwaysOnSection />
 <BenefitsSection />

@@ -1,16 +1,16 @@
-<section class="mx-auto max-w-6xl px-6 py-16">
-	<div class="grid items-center gap-10 md:grid-cols-2">
+<section class="border-t border-hairline bg-carriage/60">
+	<div class="mx-auto grid max-w-6xl items-center gap-10 px-6 py-16 md:grid-cols-2">
 		<div class="flex flex-col gap-4">
-			<h2 class="font-display text-3xl font-medium">Know where you stand, on any day.</h2>
+			<h2 class="font-display text-3xl font-medium">Automated, and still auditable.</h2>
 			<p class="max-w-prose text-chalk/70">
-				Most small businesses find out how the year went some months after it ended. The
-				numbers exist the whole time — they are just sitting in a folder, waiting for someone
-				to add them up.
+				Software that files things for you is only worth having if you can check it. Every
+				posting here — whether a person made it, a rule made it, or an assistant made it — is a
+				balanced journal with a date, a description and two sides, and you can open any of them.
 			</p>
 			<p class="max-w-prose text-chalk/70">
-				Post as you go and the answer is always current: what you are owed, what you owe, what
-				the month made. The record is yours, and it reads as a record rather than as a
-				spreadsheet nobody else can follow.
+				Nothing is a figure the system invented and now maintains privately. The statements are
+				summed from the entries every time they are asked for, which is why they can tell you
+				when they do not balance.
 			</p>
 			<a
 				href="/contact"
@@ -20,30 +20,17 @@
 				Talk to us
 			</a>
 		</div>
-		<div class="flex flex-col gap-3 rounded-2xl border border-hairline bg-carriage p-8">
-			<p class="font-mono text-sm tracking-widest text-chalk/50 uppercase">How it holds up</p>
-			<ul class="flex flex-col gap-3">
-				<li class="flex items-center gap-3 text-sm text-chalk/80">
-					<span class="h-2 w-2 shrink-0 rounded-full bg-signal"></span>
-					Every posting is a balanced journal, and every journal is readable
-				</li>
-				<li class="flex items-center gap-3 text-sm text-chalk/80">
-					<span class="h-2 w-2 shrink-0 rounded-full bg-go"></span>
-					Invoices carry their own payments, so a balance is never guessed at
-				</li>
-				<li class="flex items-center gap-3 text-sm text-chalk/80">
-					<span class="h-2 w-2 shrink-0 rounded-full bg-caution"></span>
-					Accruals and prepayments are released by the period, not by memory
-				</li>
-				<li class="flex items-center gap-3 text-sm text-chalk/80">
-					<span class="h-2 w-2 shrink-0 rounded-full bg-chalk/60"></span>
-					Both statements are built from the entries, never from a running total
-				</li>
-				<li class="flex items-center gap-3 text-sm text-chalk/80">
-					<span class="h-2 w-2 shrink-0 rounded-full bg-chalk/30"></span>
-					A balance sheet that does not balance says so, rather than rounding
-				</li>
-			</ul>
+		<div class="flex flex-col gap-4 rounded-2xl border border-hairline bg-night p-8">
+			<p class="font-mono text-sm tracking-widest text-chalk/50 uppercase">Whatever size you are</p>
+			<p class="text-sm text-chalk/70">
+				A sole trader wants the receipts to stop piling up and a straight answer about what to
+				set aside. A group wants cost centres, intercompany and a consolidated view that is
+				right on the day rather than six weeks later.
+			</p>
+			<p class="text-sm text-chalk/70">
+				The same ledger serves both. What changes between them is how much of it you use — not
+				which product you had to buy, and not whether you outgrow it in three years.
+			</p>
 		</div>
 	</div>
 </section>

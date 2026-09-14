@@ -8,12 +8,13 @@
 			Welcome to Your Books Today
 		</p>
 		<h1 class="font-display text-4xl leading-tight font-medium md:text-6xl">
-			Books that balance.<br />Books you can ask.
+			Books that keep<br />themselves.
 		</h1>
 		<p class="max-w-prose text-lg text-chalk/70">
-			Double-entry bookkeeping for a small business, kept in one ledger and readable from end to
-			end. Invoices, expenses, journals and both statements — and an assistant that can raise,
-			post and explain any of them in a sentence.
+			An accounting platform with the work taken out and the waiting removed. Bills, receipts and
+			bank lines file themselves on a schedule. The ledger underneath is proper double entry. And
+			the answer to any question about the business comes back in the conversation you are already
+			having, the moment you ask it.
 		</p>
 		<div class="flex flex-wrap items-center gap-4">
 			<a

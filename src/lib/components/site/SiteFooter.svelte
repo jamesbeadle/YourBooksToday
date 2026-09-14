@@ -8,7 +8,7 @@
 		<div class="flex flex-col gap-1">
 			<div class="flex items-center gap-3">
 				<BrandWordmark fontSize={18} />
-				<p class="text-sm text-chalk/60">Your Books Today — books that balance.</p>
+				<p class="text-sm text-chalk/60">Your Books Today — books that keep themselves.</p>
 			</div>
 			<a
 				href={`mailto:${companyDetails.contactEmail}`}

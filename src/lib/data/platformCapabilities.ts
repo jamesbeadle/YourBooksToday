@@ -13,7 +13,7 @@ export const platformCapabilities: PlatformCapability[] = [
 		id: 'ledger',
 		name: 'The ledger',
 		state: 'live',
-		tagline: 'Double entry under everything',
+		tagline: 'Every figure traces back to where it came from',
 		description:
 			'Invoices, expenses, journals, accruals and prepayments, a chart of accounts and cost centres. Every posting anything makes — you, a rule, or an assistant — is a balanced journal you can open and read.'
 	},

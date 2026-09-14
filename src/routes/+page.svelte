@@ -9,7 +9,7 @@
 
 	const pageTitle = 'Your Books Today — books that keep themselves';
 	const pageDescription =
-		'An accounting platform for businesses of any size. Bills, receipts and bank lines file themselves on a schedule, the ledger underneath is proper double entry, and you ask it anything in the conversation you are already having.';
+		'An accounting platform for businesses of any size. Bills, receipts and bank lines file themselves on a schedule, and you ask the books anything in the conversation you are already having.';
 	const shareImageUrl = `${companyDetails.websiteUrl}/favicon.svg`;
 </script>
 

@@ -11,10 +11,10 @@
 			Books that keep<br />themselves.
 		</h1>
 		<p class="max-w-prose text-lg text-chalk/70">
-			An accounting platform with the work taken out and the waiting removed. Bills, receipts and
-			bank lines file themselves on a schedule. The ledger underneath is proper double entry. And
-			the answer to any question about the business comes back in the conversation you are already
-			having, the moment you ask it.
+			Bills, receipts and bank lines file themselves on a schedule, so nothing sits waiting for
+			you to find an evening. And when you want to know how the business is doing, you ask — in
+			the conversation you are already having — and the answer comes back while you are still
+			in it.
 		</p>
 		<div class="flex flex-wrap items-center gap-4">
 			<a

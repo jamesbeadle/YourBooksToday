@@ -13,7 +13,13 @@
 <div class="flex items-start gap-3 rounded-2xl border border-chalk/10 bg-night/30 p-4 text-sm text-chalk/75">
 	<span class="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-go/20 text-xs text-go" aria-hidden="true">✓</span>
 	<p>
-		{#if plan}
+		{#if bill?.outcome === 'loss'}
+			Your business made a loss of <strong class="text-chalk">{formatMoney(Math.abs(bill.profit))}</strong>.
+			{#if bill.cisDeductions > 0}
+				The <strong class="text-chalk">{formatMoney(bill.cisDeductions)}</strong> of CIS taken from your payments
+				is normally refunded after your Self Assessment return.
+			{/if}
+		{:else if plan}
 			<strong class="text-chalk">{formatMoney(plan.amountDue)}</strong> of this goes to HMRC by
 			{formatLongDate(plan.dueOn)}. Put <strong class="text-chalk">{formatMoney(plan.monthlySetAside)} a month</strong>
 			aside and it’s covered.

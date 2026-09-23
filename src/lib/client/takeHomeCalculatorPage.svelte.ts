@@ -30,6 +30,10 @@ export class TakeHomeCalculatorPage {
 		if (this.hasRecalledThisVisit) writeStored('visit', formStorageKey, remembered);
 	}
 
+	keepPeriodAvailable(): void {
+		if (this.period === 'quarterly' && !this.form.isSelfEmployed) this.period = 'monthly';
+	}
+
 	saveComparison(): void {
 		const estimate = this.form.estimate;
 		if (estimate) this.savedComparisons.save(estimate, rememberForm(this.form));

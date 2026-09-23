@@ -31,6 +31,7 @@
 
 	onMount(() => page.recall());
 	$effect(() => page.rememberForThisVisit());
+	$effect(() => page.keepPeriodAvailable());
 	$effect(() => (takeHomePanel ? observeVisibility(takeHomePanel, (isVisible) => (isTakeHomePanelVisible = isVisible)) : undefined));
 </script>
 

@@ -16,23 +16,28 @@
 		actions
 	}: { estimate: TakeHomeEstimate; period: ResultPeriod; actions: Snippet } = $props();
 
-	const amount = $derived(splitIntoPoundsAndPence(perPeriod(estimate.takeHome, period)));
+	const isLoss = $derived(estimate.takeHome < 0);
+	const amount = $derived(splitIntoPoundsAndPence(perPeriod(Math.abs(estimate.takeHome), period)));
 	const segments = $derived(takeHomeSegments(estimate));
 </script>
 
 <div class="@container flex flex-col gap-6">
 	<div class="flex flex-col gap-2">
-		<p class="font-display text-6xl leading-none font-medium tracking-tight text-chalk sm:text-7xl">
+		<p class={`font-display text-6xl leading-none font-medium tracking-tight sm:text-7xl ${isLoss ? 'text-caution' : 'text-chalk'}`}>
 			{amount.pounds}<span class="text-3xl text-chalk/55 sm:text-4xl">{amount.pence}</span>
 		</p>
-		<p class="text-sm text-chalk/65">in your pocket every {resultPeriodOption(period).noun}</p>
+		<p class="text-sm text-chalk/65">
+			{isLoss ? 'lost' : 'in your pocket'} every {resultPeriodOption(period).noun}
+		</p>
 	</div>
-	<div><ResultPeriodToggle bind:period /></div>
+	<div><ResultPeriodToggle bind:period isSelfEmployed={estimate.selfEmployment !== null} /></div>
 	<hr class="border-chalk/10" />
-	<div class="flex flex-col items-center gap-6 @sm:flex-row">
-		<TakeHomeDonut {segments} shareKept={shareKept(estimate)} />
-		<SegmentLegend {segments} {period} />
-	</div>
+	{#if !isLoss}
+		<div class="flex flex-col items-center gap-6 @sm:flex-row">
+			<TakeHomeDonut {segments} shareKept={shareKept(estimate)} />
+			<SegmentLegend {segments} {period} />
+		</div>
+	{/if}
 	<TakeHomeNote {estimate} />
 	{@render actions()}
 </div>

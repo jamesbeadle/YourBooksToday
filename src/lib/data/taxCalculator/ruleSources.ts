@@ -13,5 +13,6 @@ export const ruleSources = {
 	workingFromHome: 'https://www.gov.uk/simpler-income-tax-simplified-expenses/working-from-home',
 	makingTaxDigital:
 		'https://www.gov.uk/guidance/check-if-youre-eligible-for-making-tax-digital-for-income-tax',
+	tradingAllowance: 'https://www.gov.uk/guidance/tax-free-allowances-on-property-and-trading-income',
 	paymentsOnAccount: 'https://www.gov.uk/understand-self-assessment-bill/payments-on-account'
 };

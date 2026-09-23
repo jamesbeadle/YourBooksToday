@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { estimateTakeHome } from './takeHomeEstimate';
-import { employedOn, selfEmployedOn, testInputs } from './takeHomeTestInputs';
+import { employedOn, selfEmployedOn, selfEmploymentWithProfit, testInputs } from './takeHomeTestInputs';
 
 describe('estimateTakeHome for an employee', () => {
 	it('keeps £35,919.60 of £45,000: £6,486 income tax and £2,594.40 NI (8% of £32,430)', () => {
@@ -67,12 +67,10 @@ describe('estimateTakeHome for the self-employed', () => {
 	});
 
 	it('refunds £1,468.20 when £6,000 of CIS covered a £4,531.80 bill', () => {
-		const selfEmployment = {
-			...testInputs().selfEmployment,
-			annualIncome: 30000,
-			tradingStatus: 'cisSubcontractor' as const,
+		const selfEmployment = selfEmploymentWithProfit(30000, {
+			tradingStatus: 'cisSubcontractor',
 			annualCisDeductions: 6000
-		};
+		});
 		const bill = estimateTakeHome(selfEmployedOn(30000, { selfEmployment })).selfAssessment;
 		expect(bill?.outcome).toBe('refund');
 		expect(bill?.balanceDue).toBe(-1468.2);

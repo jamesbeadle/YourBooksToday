@@ -12,7 +12,7 @@
 	const total = $derived(segments.reduce((sum, segment) => sum + segment.amount, 0));
 	const arcs = $derived.by(() => {
 		let offset = 0;
-		return segments.map((segment) => {
+		return segments.filter((segment) => segment.amount > 0).map((segment) => {
 			const length = total > 0 ? (segment.amount / total) * circumference : 0;
 			const arc = { segment, dash: Math.max(0, length - gapBetweenSegments), offset };
 			offset += length;

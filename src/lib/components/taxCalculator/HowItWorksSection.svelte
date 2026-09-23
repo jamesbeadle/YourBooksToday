@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { TaxYearRules } from '$lib/data/taxCalculator/taxRuleTypes';
 	import FigureSources from './FigureSources.svelte';
+	import PlainEnglishExplanations from './PlainEnglishExplanations.svelte';
 	import SectionHeading from './SectionHeading.svelte';
 
 	let { stepNumber, rules }: { stepNumber: number; rules: TaxYearRules } = $props();
@@ -23,11 +24,13 @@
 			</li>
 		{/each}
 	</ol>
+	<PlainEnglishExplanations {rules} />
 	<FigureSources {rules} />
 	<p class="max-w-3xl text-xs leading-relaxed text-chalk/50">
 		An estimate for guidance only — not tax, legal or financial advice, and not connected to HMRC. Tax is worked out
-		over the whole year, so month-to-month payslips can differ, especially around bonuses. It doesn’t cover dividends,
-		savings or rental income, salary sacrifice, Marriage Allowance, capital allowances or trading-loss relief against
-		other income. For your own situation, speak to an accountant.
+		over the whole year, so month-to-month payslips can differ, especially around bonuses. It doesn’t cover limited
+		companies, partnerships or landlords, dividends, savings or rental income, salary sacrifice, Marriage Allowance,
+		capital allowances, trading-loss relief against other income or voluntary National Insurance for time abroad. For
+		your own situation, speak to an accountant.
 	</p>
 </section>

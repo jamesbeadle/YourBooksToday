@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { paymentsOnAccountFor } from './paymentsOnAccount';
 import { estimateTakeHome } from './takeHomeEstimate';
-import { testInputs } from './takeHomeTestInputs';
+import { selfEmploymentWithProfit, testInputs } from './takeHomeTestInputs';
 
 const jobAndSideIncome = (studentLoanPlan: 'plan2' | null = null) =>
 	estimateTakeHome(
@@ -9,7 +9,7 @@ const jobAndSideIncome = (studentLoanPlan: 'plan2' | null = null) =>
 			earningType: 'both',
 			annualSalary: 30000,
 			studentLoans: { undergraduatePlan: studentLoanPlan, hasPostgraduateLoan: false },
-			selfEmployment: { ...testInputs().selfEmployment, annualIncome: 20000 }
+			selfEmployment: selfEmploymentWithProfit(20000)
 		})
 	);
 

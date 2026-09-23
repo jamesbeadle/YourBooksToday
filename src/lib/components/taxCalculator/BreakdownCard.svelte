@@ -1,18 +1,22 @@
 <script lang="ts">
 	import { scaleFor } from '$lib/data/taxCalculator/breakdownRow';
-	import { incomeTaxBandRows } from '$lib/data/taxCalculator/incomeTaxBandRows';
+	import { effectiveTaxRate } from '$lib/data/taxCalculator/highIncomeSignals';
 	import { resultPeriodOption, type ResultPeriod } from '$lib/data/taxCalculator/resultPeriods';
 	import type { TakeHomeEstimate } from '$lib/data/taxCalculator/takeHomeEstimate';
 	import { takeHomeBreakdown } from '$lib/data/taxCalculator/takeHomeBreakdown';
+	import { formatPercentage } from '$lib/data/taxCalculator/taxCalculatorFormatting';
+	import BandsDisclosure from './BandsDisclosure.svelte';
 	import BreakdownTable from './BreakdownTable.svelte';
-	import DisclosureMarker from './DisclosureMarker.svelte';
-	import { disclosureSummaryClasses, widgetCardClasses } from './calculatorStyles';
+	import EstimateExclusions from './EstimateExclusions.svelte';
+	import QuarterlyViewNote from './QuarterlyViewNote.svelte';
+	import { widgetCardClasses } from './calculatorStyles';
 
 	let { estimate, period }: { estimate: TakeHomeEstimate; period: ResultPeriod } = $props();
 
-	const periodOption = $derived(resultPeriodOption(period));
-	const scale = $derived(scaleFor(periodOption.periodsPerYear));
+	const effectiveRateFractionDigits = 1;
+	const scale = $derived(scaleFor(resultPeriodOption(period).periodsPerYear));
 	const periodAdjective = $derived(period === 'yearly' ? 'annual' : period);
+	const rate = $derived(effectiveTaxRate(estimate));
 </script>
 
 <article class={widgetCardClasses}>
@@ -20,11 +24,14 @@
 		<h3 class="font-display text-xl font-medium">Your {periodAdjective} breakdown</h3>
 		<span class="rounded-md border border-hairline px-2 py-1 font-mono text-xs text-chalk/60">{estimate.rules.taxYear}</span>
 	</div>
+	{#if period === 'quarterly'}<QuarterlyViewNote dueOn={estimate.rules.balancingPaymentDueOn} />{/if}
 	<BreakdownTable rows={takeHomeBreakdown(estimate, scale)} label={`Your ${periodAdjective} breakdown`} />
-	<details class="group border-t border-hairline pt-4 text-sm">
-		<summary class={disclosureSummaryClasses}>Show income tax bands <DisclosureMarker /></summary>
-		<div class="mt-3">
-			<BreakdownTable rows={incomeTaxBandRows(estimate, scale)} label="Income tax by band" />
-		</div>
-	</details>
+	{#if rate !== null}
+		<p class="rounded-2xl bg-night/50 px-4 py-3 text-sm text-chalk/70">
+			Your effective tax rate is <strong class="text-chalk">{formatPercentage(rate, effectiveRateFractionDigits)}</strong>
+			— income tax and National Insurance as a share of what you earn.
+		</p>
+	{/if}
+	<BandsDisclosure {estimate} {scale} />
+	<EstimateExclusions />
 </article>

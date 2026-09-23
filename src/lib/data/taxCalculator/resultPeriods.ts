@@ -1,10 +1,15 @@
-export type ResultPeriod = 'monthly' | 'yearly' | 'weekly';
+export type ResultPeriod = 'monthly' | 'yearly' | 'weekly' | 'quarterly';
 
 export const resultPeriodOptions: { period: ResultPeriod; label: string; noun: string; periodsPerYear: number }[] = [
 	{ period: 'monthly', label: 'Monthly', noun: 'month', periodsPerYear: 12 },
 	{ period: 'yearly', label: 'Yearly', noun: 'year', periodsPerYear: 1 },
-	{ period: 'weekly', label: 'Weekly', noun: 'week', periodsPerYear: 52 }
+	{ period: 'weekly', label: 'Weekly', noun: 'week', periodsPerYear: 52 },
+	{ period: 'quarterly', label: 'Quarterly', noun: 'quarter', periodsPerYear: 4 }
 ];
+
+export function resultPeriodsFor(isSelfEmployed: boolean) {
+	return resultPeriodOptions.filter((option) => isSelfEmployed || option.period !== 'quarterly');
+}
 
 export const monthsPerYear = 12;
 

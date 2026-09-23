@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { TaxYearRules } from '$lib/data/taxCalculator/taxRuleTypes';
 	import { formatLongDate } from '$lib/data/taxCalculator/taxDates';
-	import { paymentsOnAccountRules, pensionReliefSourceUrl } from '$lib/data/taxCalculator/sharedRules';
+	import { paymentsOnAccountRules, pensionReliefSourceUrl, tradingAllowanceRules } from '$lib/data/taxCalculator/sharedRules';
 
 	let { rules }: { rules: TaxYearRules } = $props();
 
@@ -13,6 +13,7 @@
 		{ topic: 'Mileage rates', url: rules.mileage.sourceUrl },
 		{ topic: 'Working from home flat rates', url: rules.homeWorking.sourceUrl },
 		{ topic: 'Making Tax Digital thresholds', url: rules.makingTaxDigital.sourceUrl },
+		{ topic: 'Trading allowance', url: tradingAllowanceRules.sourceUrl },
 		{ topic: 'Payments on account', url: paymentsOnAccountRules.sourceUrl }
 	]);
 </script>

@@ -1,6 +1,6 @@
 import type { RequestHandler } from './$types';
 
-const publicPagePaths = ['/', '/contact', '/terms', '/privacy', '/account/sign-in'];
+const publicPagePaths = ['/', '/tax-calculator', '/contact', '/terms', '/privacy', '/account/sign-in'];
 
 const XML_CONTENT_TYPE = 'application/xml';
 

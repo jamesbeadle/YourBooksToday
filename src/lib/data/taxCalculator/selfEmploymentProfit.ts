@@ -1,5 +1,6 @@
 import { roundToPence } from '$lib/data/accounting/money';
 import { claimHomeWorking, claimMileage, type HomeWorkingClaim, type MileageClaim } from './allowableClaims';
+import { tradingAllowanceRules } from './sharedRules';
 import { hasSelfEmployment, type TakeHomeInputs } from './takeHomeInputs';
 import type { TaxYearRules } from './taxRuleTypes';
 
@@ -8,6 +9,9 @@ export type SelfEmploymentProfit = {
 	expenses: number;
 	mileage: MileageClaim;
 	homeWorking: HomeWorkingClaim;
+	allowableClaims: number;
+	tradingAllowance: number;
+	usesTradingAllowance: boolean;
 	profit: number;
 	taxableProfit: number;
 	cisDeductions: number;
@@ -22,7 +26,10 @@ export function selfEmploymentProfitFor(inputs: TakeHomeInputs, rules: TaxYearRu
 	const trade = inputs.selfEmployment;
 	const mileage = claimMileage(trade.vehicleType, trade.annualBusinessMiles, rules.mileage);
 	const homeWorking = claimHomeWorking(trade.homeWorkingBand, rules.homeWorking);
-	const profit = roundToPence(trade.annualIncome - trade.annualExpenses - mileage.amount - homeWorking.amount);
+	const allowableClaims = roundToPence(trade.annualExpenses + mileage.amount + homeWorking.amount);
+	const tradingAllowance = Math.min(tradingAllowanceRules.allowance, trade.annualIncome);
+	const usesTradingAllowance = tradingAllowance > allowableClaims;
+	const profit = roundToPence(trade.annualIncome - (usesTradingAllowance ? tradingAllowance : allowableClaims));
 	const taxableProfit = Math.max(0, profit);
 	const pensionGrossContribution = pensionFromProfit(inputs, taxableProfit);
 	return {
@@ -30,6 +37,9 @@ export function selfEmploymentProfitFor(inputs: TakeHomeInputs, rules: TaxYearRu
 		expenses: trade.annualExpenses,
 		mileage,
 		homeWorking,
+		allowableClaims,
+		tradingAllowance,
+		usesTradingAllowance,
 		profit,
 		taxableProfit,
 		cisDeductions: trade.tradingStatus === 'cisSubcontractor' ? trade.annualCisDeductions : 0,

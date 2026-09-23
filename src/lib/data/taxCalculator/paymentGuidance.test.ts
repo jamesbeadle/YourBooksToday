@@ -5,18 +5,16 @@ import { planPayment } from './paymentPlan';
 import { paymentsOnAccountFor } from './paymentsOnAccount';
 import type { SelfAssessmentBill } from './selfAssessmentBill';
 import { estimateTakeHome } from './takeHomeEstimate';
-import { selfEmployedOn, testInputs } from './takeHomeTestInputs';
+import { selfEmployedOn, selfEmploymentWithProfit } from './takeHomeTestInputs';
 import { rulesFor } from './taxYearRules';
 import type { TaxYearName } from './taxRuleTypes';
 
-const billFor = (taxYear: TaxYearName, annualIncome: number, annualCisDeductions = 0): SelfAssessmentBill => {
-	const selfEmployment = {
-		...testInputs().selfEmployment,
-		annualIncome,
+const billFor = (taxYear: TaxYearName, profit: number, annualCisDeductions = 0): SelfAssessmentBill => {
+	const selfEmployment = selfEmploymentWithProfit(profit, {
 		annualCisDeductions,
-		tradingStatus: annualCisDeductions > 0 ? ('cisSubcontractor' as const) : ('soleTrader' as const)
-	};
-	return estimateTakeHome(selfEmployedOn(annualIncome, { taxYear, selfEmployment })).selfAssessment!;
+		tradingStatus: annualCisDeductions > 0 ? 'cisSubcontractor' : 'soleTrader'
+	});
+	return estimateTakeHome(selfEmployedOn(profit, { taxYear, selfEmployment })).selfAssessment!;
 };
 
 describe('planPayment', () => {

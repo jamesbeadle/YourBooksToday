@@ -41,3 +41,8 @@ export const earliestMakingTaxDigitalRules = {
 };
 
 export const pensionReliefSourceUrl = ruleSources.pensionTaxRelief;
+
+export const tradingAllowanceRules = {
+	allowance: 1000,
+	sourceUrl: ruleSources.tradingAllowance
+};

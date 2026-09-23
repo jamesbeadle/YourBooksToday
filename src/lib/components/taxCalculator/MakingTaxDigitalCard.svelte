@@ -28,6 +28,11 @@
 		{formatLongDate(earliest.appliesFrom)}.
 	</p>
 	{#if isInScope}
+		<ul class="flex list-disc flex-col gap-1 pl-5 text-sm text-chalk/70">
+			<li>Keep digital records of business income and expenses</li>
+			<li>Send four quarterly updates a year from compatible software</li>
+			<li>Send a final declaration by 31 January after the tax year</li>
+		</ul>
 		<QuarterlyDeadlines />
 		<p class="text-xs text-chalk/55">
 			Updates are summaries, not payments. Your Books Today keeps the digital records for you —

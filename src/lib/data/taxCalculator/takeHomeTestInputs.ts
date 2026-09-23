@@ -1,4 +1,6 @@
-import type { TakeHomeInputs } from './takeHomeInputs';
+import type { SelfEmploymentInputs, TakeHomeInputs } from './takeHomeInputs';
+
+const expensesThatBeatTheTradingAllowance = 1000;
 
 export function testInputs(changes: Partial<TakeHomeInputs> = {}): TakeHomeInputs {
 	return {
@@ -23,14 +25,23 @@ export function testInputs(changes: Partial<TakeHomeInputs> = {}): TakeHomeInput
 	};
 }
 
+export function selfEmploymentWithProfit(profit: number, changes: Partial<SelfEmploymentInputs> = {}): SelfEmploymentInputs {
+	return {
+		...testInputs().selfEmployment,
+		annualIncome: profit + expensesThatBeatTheTradingAllowance,
+		annualExpenses: expensesThatBeatTheTradingAllowance,
+		...changes
+	};
+}
+
 export function employedOn(annualSalary: number, changes: Partial<TakeHomeInputs> = {}): TakeHomeInputs {
 	return testInputs({ earningType: 'employed', annualSalary, ...changes });
 }
 
-export function selfEmployedOn(annualIncome: number, changes: Partial<TakeHomeInputs> = {}): TakeHomeInputs {
+export function selfEmployedOn(profit: number, changes: Partial<TakeHomeInputs> = {}): TakeHomeInputs {
 	return testInputs({
 		earningType: 'selfEmployed',
 		...changes,
-		selfEmployment: { ...testInputs().selfEmployment, annualIncome, ...changes.selfEmployment }
+		selfEmployment: { ...selfEmploymentWithProfit(profit), ...changes.selfEmployment }
 	});
 }

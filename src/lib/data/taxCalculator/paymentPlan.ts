@@ -9,7 +9,10 @@ export type PaymentPlan = {
 	daysRemaining: number;
 	monthsRemaining: number;
 	monthlySetAside: number;
+	quarterlySetAside: number;
 };
+
+const monthsPerQuarter = 3;
 
 const fewestMonthsToSpreadOver = 1;
 
@@ -18,17 +21,14 @@ export function planPayment(bill: SelfAssessmentBill, dueOn: string, today: Date
 	const daysRemaining = daysBetween(today, endOfDayOn(dueOn));
 	const monthsRemaining = Math.round(daysRemaining / averageDaysPerMonth);
 	const monthsToSpreadOver = Math.max(fewestMonthsToSpreadOver, monthsRemaining);
+	const monthlySetAside = roundToPence(bill.balanceDue / monthsToSpreadOver);
 	return {
 		amountDue: bill.balanceDue,
 		dueOn,
 		isOverdue: daysRemaining < 0,
 		daysRemaining: Math.max(1, Math.ceil(daysRemaining)),
 		monthsRemaining,
-		monthlySetAside: roundToPence(bill.balanceDue / monthsToSpreadOver)
+		monthlySetAside,
+		quarterlySetAside: roundToPence(monthlySetAside * monthsPerQuarter)
 	};
-}
-
-export function shareOfProfitToSetAside(bill: SelfAssessmentBill): number | null {
-	if (bill.profit <= 0) return null;
-	return Math.max(0, bill.balanceDue) / bill.profit;
 }

@@ -8,6 +8,11 @@ export function isPayingHigherRates(estimate: TakeHomeEstimate): boolean {
 	return estimate.incomeTax.slices.some((slice) => slice.isHigherRate && slice.amount > 0);
 }
 
+export function effectiveTaxRate(estimate: TakeHomeEstimate): number | null {
+	if (estimate.grossEarnings <= 0) return null;
+	return (estimate.incomeTax.total + estimate.class1.total + estimate.class4.total) / estimate.grossEarnings;
+}
+
 export function shareKept(estimate: TakeHomeEstimate): number {
 	if (estimate.grossEarnings <= 0) return 0;
 	return Math.max(0, estimate.takeHome) / estimate.grossEarnings;

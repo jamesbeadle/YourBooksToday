@@ -18,6 +18,11 @@ export function formatWholePounds(amount: number): string {
 	return wholePoundsFormatter.format(amount);
 }
 
+export function splitIntoPoundsAndPence(amount: number): { pounds: string; pence: string } {
+	const [pounds, pence] = formatMoney(amount).split('.');
+	return { pounds, pence: `.${pence}` };
+}
+
 export function formatPencePerMile(poundsPerMile: number): string {
 	return `${Math.round(poundsPerMile * penceInPound)}p`;
 }
@@ -32,4 +37,9 @@ export function formatMiles(miles: number): string {
 
 export function deducted(amount: number): string {
 	return `−${formatMoney(amount)}`;
+}
+
+export function signed(amount: number): string {
+	const sign = amount < 0 ? '−' : '+';
+	return `${sign}${formatMoney(Math.abs(amount))}`;
 }

@@ -1,43 +1,43 @@
 import { sliceBetween, sumOfSlices, type BandSlice } from './bandSlice';
-import type { IncomeTaxRules } from './taxYearRules';
+import type { IncomeTaxRules, TaxBand } from './taxRuleTypes';
+
+export type IncomeTaxSlice = BandSlice & { name: string; isHigherRate: boolean };
 
 export type IncomeTaxCalculation = {
-	basicRate: BandSlice;
-	higherRate: BandSlice;
-	additionalRate: BandSlice;
+	slices: IncomeTaxSlice[];
 	total: number;
 };
 
 const poundsOfIncomePerPoundOfAllowanceLost = 2;
 
-export function fullPersonalAllowanceFor(profit: number, rules: IncomeTaxRules): number {
-	const incomeOverTaperThreshold = Math.max(0, profit - rules.personalAllowanceTaperThreshold);
+export function fullPersonalAllowanceFor(adjustedNetIncome: number, rules: IncomeTaxRules): number {
+	const incomeOverTaperThreshold = Math.max(0, adjustedNetIncome - rules.personalAllowanceTaperThreshold);
 	const allowanceLost = Math.floor(incomeOverTaperThreshold / poundsOfIncomePerPoundOfAllowanceLost);
 	return Math.max(0, rules.personalAllowance - allowanceLost);
 }
 
-export function personalAllowanceUsedBy(profit: number, rules: IncomeTaxRules): number {
-	return Math.min(Math.max(0, profit), fullPersonalAllowanceFor(profit, rules));
+export function bandsExtendedByPensionRelief(
+	bands: TaxBand[],
+	grossReliefAtSourceContributions: number,
+	reliefAtSourceRate: number
+): TaxBand[] {
+	return bands.map((band) =>
+		band.rate > reliefAtSourceRate
+			? { ...band, startsAt: band.startsAt + grossReliefAtSourceContributions }
+			: band
+	);
 }
 
-export function calculateIncomeTax(taxableIncome: number, rules: IncomeTaxRules): IncomeTaxCalculation {
-	const basicRate = sliceBetween(taxableIncome, 0, rules.basicRateBand, rules.basicRate);
-	const higherRate = sliceBetween(
-		taxableIncome,
-		rules.basicRateBand,
-		rules.additionalRateThreshold,
-		rules.higherRate
-	);
-	const additionalRate = sliceBetween(
-		taxableIncome,
-		rules.additionalRateThreshold,
-		Number.POSITIVE_INFINITY,
-		rules.additionalRate
-	);
-	return {
-		basicRate,
-		higherRate,
-		additionalRate,
-		total: sumOfSlices([basicRate, higherRate, additionalRate])
-	};
+export function calculateIncomeTax(taxableIncome: number, bands: TaxBand[]): IncomeTaxCalculation {
+	const slices = bands.map((band, bandIndex) => {
+		const endsAt = bands[bandIndex + 1]?.startsAt ?? Number.POSITIVE_INFINITY;
+		const slice = sliceBetween(taxableIncome, band.startsAt, endsAt, band.rate);
+		return { ...slice, name: band.name, isHigherRate: band.isHigherRate };
+	});
+	return { slices, total: sumOfSlices(slices) };
+}
+
+export function incomeTaxOnPayAlone(pay: number, bands: TaxBand[], rules: IncomeTaxRules): number {
+	const personalAllowance = Math.min(pay, fullPersonalAllowanceFor(pay, rules));
+	return calculateIncomeTax(Math.max(0, pay - personalAllowance), bands).total;
 }

@@ -1,0 +1,33 @@
+import type { BreakdownRow, BreakdownScale } from './breakdownRow';
+import { detail, line, subtotal } from './breakdownRow';
+import type { SelfEmploymentProfit } from './selfEmploymentProfit';
+import { deducted, formatMiles, formatMoney, formatPencePerMile } from './taxCalculatorFormatting';
+
+export function selfEmploymentRows(trade: SelfEmploymentProfit | null, scale: BreakdownScale): BreakdownRow[] {
+	if (trade === null) return [];
+	const claimRows = [...expenseRows(trade, scale), ...mileageRows(trade, scale), ...homeWorkingRows(trade, scale)];
+	const profitRows = claimRows.length > 0 ? [subtotal('Self-employed profit', formatMoney(scale.of(trade.profit)))] : [];
+	return [line('Self-employed income', formatMoney(scale.of(trade.income))), ...claimRows, ...profitRows];
+}
+
+function expenseRows(trade: SelfEmploymentProfit, scale: BreakdownScale): BreakdownRow[] {
+	if (trade.expenses <= 0) return [];
+	return [line('Less: business expenses', deducted(scale.of(trade.expenses)))];
+}
+
+function mileageRows(trade: SelfEmploymentProfit, scale: BreakdownScale): BreakdownRow[] {
+	if (trade.mileage.amount <= 0) return [];
+	const claimRow = line('Less: mileage', deducted(scale.of(trade.mileage.amount)));
+	if (!scale.isYearly) return [claimRow];
+	const portionDetails = trade.mileage.portions.map((portion) =>
+		detail(`${formatMiles(portion.miles)} at ${formatPencePerMile(portion.ratePerMile)} a mile`)
+	);
+	return [claimRow, ...portionDetails];
+}
+
+function homeWorkingRows(trade: SelfEmploymentProfit, scale: BreakdownScale): BreakdownRow[] {
+	if (trade.homeWorking.amount <= 0) return [];
+	const claimRow = line('Less: working from home', deducted(scale.of(trade.homeWorking.amount)));
+	if (!scale.isYearly) return [claimRow];
+	return [claimRow, detail(`12 months at ${formatMoney(trade.homeWorking.monthlyAmount)} a month`)];
+}

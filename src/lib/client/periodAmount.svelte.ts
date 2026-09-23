@@ -9,6 +9,10 @@ export class PeriodAmount {
 	amount = $state<number | null>(null);
 	period = $state<AmountPeriod>('annual');
 
+	constructor(initialAmount: number | null = null) {
+		this.amount = initialAmount;
+	}
+
 	get isNegative(): boolean {
 		return (this.amount ?? 0) < 0;
 	}
@@ -27,7 +31,7 @@ export class PeriodAmount {
 
 	get errorMessage(): string | null {
 		if (this.isNegative) return 'This can’t be negative.';
-		if (this.isImplausiblyLarge) return 'This looks unusually high for a sole trader — please check it.';
+		if (this.isImplausiblyLarge) return 'That looks unusually high — please check it.';
 		return null;
 	}
 
@@ -41,8 +45,12 @@ export class PeriodAmount {
 		this.period = remembered.period;
 	}
 
-	clear(): void {
-		this.amount = null;
-		this.period = 'annual';
+	setAnnualAmount(annualAmount: number): void {
+		this.amount = roundToPence(annualAmount / periodsPerYearOf(this.period));
+	}
+
+	copyFrom(other: PeriodAmount): void {
+		this.amount = other.amount;
+		this.period = other.period;
 	}
 }

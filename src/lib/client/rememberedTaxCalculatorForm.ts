@@ -1,28 +1,32 @@
-import { taxYearNames } from '$lib/data/taxCalculator/taxYearRules';
-import type { RememberedTaxCalculatorForm } from './taxCalculatorForm.svelte';
+import { currentTaxYear, taxYearNames } from '$lib/data/taxCalculator/taxYearRules';
+import type { RememberedPeriodAmount } from './periodAmount.svelte';
+import type { TaxCalculatorForm } from './taxCalculatorForm.svelte';
 
-const storageKey = 'ybt-tax-calculator';
+const amountNames = ['salary', 'bonus', 'selfEmploymentIncome', 'expenses', 'cisDeductions', 'businessMiles'] as const;
 
-export function saveForThisVisit(form: RememberedTaxCalculatorForm): void {
-	try {
-		sessionStorage.setItem(storageKey, JSON.stringify(form));
-	} catch {
-		return;
-	}
+const choiceNames = [
+	'taxYear',
+	'taxRegion',
+	'earningType',
+	'tradingStatus',
+	'vehicleType',
+	'homeWorkingBand',
+	'pensionPercentage',
+	'undergraduatePlan',
+	'hasPostgraduateLoan'
+] as const;
+
+export type RememberedTaxCalculatorForm = Record<string, unknown>;
+
+export function rememberForm(form: TaxCalculatorForm): RememberedTaxCalculatorForm {
+	const amounts = Object.fromEntries(amountNames.map((name) => [name, form[name].remembered()]));
+	const choices = Object.fromEntries(choiceNames.map((name) => [name, form[name]]));
+	return { ...amounts, ...choices };
 }
 
-export function recallFromThisVisit(): Partial<RememberedTaxCalculatorForm> {
-	try {
-		const remembered = JSON.parse(sessionStorage.getItem(storageKey) ?? '{}');
-		return withKnownTaxYearOnly(remembered);
-	} catch {
-		return {};
-	}
-}
-
-function withKnownTaxYearOnly(
-	remembered: Partial<RememberedTaxCalculatorForm>
-): Partial<RememberedTaxCalculatorForm> {
-	if (remembered.taxYear === undefined || taxYearNames.includes(remembered.taxYear)) return remembered;
-	return { ...remembered, taxYear: undefined };
+export function restoreForm(form: TaxCalculatorForm, remembered: RememberedTaxCalculatorForm): void {
+	amountNames.forEach((name) => form[name].restore(remembered[name] as RememberedPeriodAmount | undefined));
+	const rememberedChoices = choiceNames.filter((name) => name in remembered);
+	Object.assign(form, Object.fromEntries(rememberedChoices.map((name) => [name, remembered[name]])));
+	if (!taxYearNames.includes(form.taxYear)) form.taxYear = currentTaxYear(new Date());
 }

@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { disclosureClasses, disclosureSummaryClasses } from './taxCalculatorStyles';
+	import { disclosureClasses, disclosureSummaryClasses } from './calculatorStyles';
+	import DisclosureMarker from './DisclosureMarker.svelte';
 
 	const claimableExpenses = [
 		'Tools and equipment — drills, saws, ladders, PPE',
@@ -13,14 +14,13 @@
 </script>
 
 <details class={disclosureClasses}>
-	<summary class={disclosureSummaryClasses}>Not sure what counts as an expense?</summary>
+	<summary class={disclosureSummaryClasses}>Not sure what counts as an expense? <DisclosureMarker /></summary>
 	<ul class="mt-3 flex list-disc flex-col gap-1 pl-5">
 		{#each claimableExpenses as expense (expense)}
 			<li>{expense}</li>
 		{/each}
 	</ul>
 	<p class="mt-3">
-		<strong class="text-chalk">You can’t claim:</strong> commuting, everyday clothes, fines or
-		entertaining clients.
+		<strong class="text-chalk">You can’t claim:</strong> commuting, everyday clothes, fines or entertaining clients.
 	</p>
 </details>

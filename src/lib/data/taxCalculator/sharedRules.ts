@@ -1,24 +1,21 @@
 import { ruleSources } from './ruleSources';
-import type { Class4Rules, HomeWorkingRules, IncomeTaxRules } from './taxYearRules';
+import type { HomeWorkingRules, NationalInsuranceBands, TaxBand, IncomeTaxRules } from './taxRuleTypes';
 
-export const sharedIncomeTaxRules: IncomeTaxRules = {
-	personalAllowance: 12570,
-	personalAllowanceTaperThreshold: 100000,
-	basicRateBand: 37700,
-	additionalRateThreshold: 125140,
-	basicRate: 0.2,
-	higherRate: 0.4,
-	additionalRate: 0.45,
-	sourceUrl: ruleSources.incomeTax
-};
+export const class1And4Limits = { lowerLimit: 12570, upperLimit: 50270 };
 
-export const sharedClass4Rules: Class4Rules = {
-	lowerProfitsLimit: 12570,
-	upperProfitsLimit: 50270,
-	mainRate: 0.06,
-	additionalRate: 0.02,
-	sourceUrl: ruleSources.nationalInsurance
-};
+export const sharedClass1: NationalInsuranceBands = { ...class1And4Limits, mainRate: 0.08, additionalRate: 0.02 };
+
+export const sharedClass4: NationalInsuranceBands = { ...class1And4Limits, mainRate: 0.06, additionalRate: 0.02 };
+
+export function incomeTaxRulesWith(restOfUk: TaxBand[], scotland: TaxBand[]): IncomeTaxRules {
+	return {
+		personalAllowance: 12570,
+		personalAllowanceTaperThreshold: 100000,
+		bandsByRegion: { restOfUk, scotland },
+		pensionReliefAtSourceRate: 0.2,
+		sourceUrl: ruleSources.incomeTax
+	};
+}
 
 export const sharedHomeWorkingRules: HomeWorkingRules = {
 	monthlyAmountByBand: {
@@ -42,3 +39,5 @@ export const earliestMakingTaxDigitalRules = {
 	appliesFrom: '2026-04-06',
 	sourceUrl: ruleSources.makingTaxDigital
 };
+
+export const pensionReliefSourceUrl = ruleSources.pensionTaxRelief;

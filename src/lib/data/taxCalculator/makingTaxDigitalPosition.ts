@@ -1,5 +1,5 @@
 import { earliestMakingTaxDigitalRules } from './sharedRules';
-import type { TaxEstimate } from './taxEstimate';
+import type { MakingTaxDigitalRules } from './taxRuleTypes';
 
 export type MakingTaxDigitalPosition = {
 	isBroughtInByThisIncome: boolean;
@@ -8,13 +8,14 @@ export type MakingTaxDigitalPosition = {
 	isOverEarliestThreshold: boolean;
 };
 
-export function makingTaxDigitalPositionFor(estimate: TaxEstimate): MakingTaxDigitalPosition {
-	const qualifyingIncome = estimate.inputs.annualIncome;
-	const rules = estimate.rules.makingTaxDigital;
+export function makingTaxDigitalPositionFor(
+	selfEmploymentIncome: number,
+	rules: MakingTaxDigitalRules
+): MakingTaxDigitalPosition {
 	return {
-		isBroughtInByThisIncome: qualifyingIncome > rules.qualifyingIncomeThreshold,
+		isBroughtInByThisIncome: selfEmploymentIncome > rules.qualifyingIncomeThreshold,
 		appliesFrom: rules.appliesFrom,
 		qualifyingIncomeThreshold: rules.qualifyingIncomeThreshold,
-		isOverEarliestThreshold: qualifyingIncome > earliestMakingTaxDigitalRules.qualifyingIncomeThreshold
+		isOverEarliestThreshold: selfEmploymentIncome > earliestMakingTaxDigitalRules.qualifyingIncomeThreshold
 	};
 }

@@ -1,9 +1,10 @@
-import type { TaxEstimate } from './taxEstimate';
+import type { SelfAssessmentBill } from './selfAssessmentBill';
+import type { NationalInsuranceRules } from './taxRuleTypes';
 
 export type Class2Position = 'creditedAutomatically' | 'belowSmallProfitsThreshold' | 'tradingLoss';
 
-export function class2PositionFor(estimate: TaxEstimate): Class2Position {
-	if (estimate.outcome === 'loss') return 'tradingLoss';
-	if (estimate.profit >= estimate.rules.class2.smallProfitsThreshold) return 'creditedAutomatically';
+export function class2PositionFor(bill: SelfAssessmentBill, rules: NationalInsuranceRules): Class2Position {
+	if (bill.outcome === 'loss') return 'tradingLoss';
+	if (bill.profit >= rules.smallProfitsThreshold) return 'creditedAutomatically';
 	return 'belowSmallProfitsThreshold';
 }

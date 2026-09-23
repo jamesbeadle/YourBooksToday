@@ -1,12 +1,11 @@
-export type AmountPeriod = 'annual' | 'quarterly' | 'monthly';
+export type AmountPeriod = 'annual' | 'quarterly' | 'monthly' | 'weekly';
 
 export const amountPeriodOptions: { period: AmountPeriod; label: string; periodsPerYear: number }[] = [
-	{ period: 'annual', label: 'Annual', periodsPerYear: 1 },
-	{ period: 'quarterly', label: 'Quarterly', periodsPerYear: 4 },
-	{ period: 'monthly', label: 'Monthly', periodsPerYear: 12 }
+	{ period: 'annual', label: 'Per year', periodsPerYear: 1 },
+	{ period: 'quarterly', label: 'Per quarter', periodsPerYear: 4 },
+	{ period: 'monthly', label: 'Per month', periodsPerYear: 12 },
+	{ period: 'weekly', label: 'Per week', periodsPerYear: 52 }
 ];
-
-export const quartersPerYear = 4;
 
 export function periodsPerYearOf(period: AmountPeriod): number {
 	return amountPeriodOptions.find((option) => option.period === period)?.periodsPerYear ?? 1;

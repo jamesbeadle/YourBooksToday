@@ -1,6 +1,6 @@
 import { roundToPence } from '$lib/data/accounting/money';
-import type { VehicleType } from './taxEstimateInputs';
-import type { HomeWorkingBand, HomeWorkingRules, MileageRules } from './taxYearRules';
+import type { VehicleType } from './takeHomeInputs';
+import type { HomeWorkingBand, HomeWorkingRules, MileageRules } from './taxRuleTypes';
 
 export type MileagePortion = {
 	miles: number;

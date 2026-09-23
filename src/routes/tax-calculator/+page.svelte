@@ -1,59 +1,79 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { recallFromThisVisit, saveForThisVisit } from '$lib/client/rememberedTaxCalculatorForm';
-	import { TaxCalculatorForm } from '$lib/client/taxCalculatorForm.svelte';
-	import EmptyEstimatePrompt from '$lib/components/taxCalculator/EmptyEstimatePrompt.svelte';
-	import IncomeAndExpensesFields from '$lib/components/taxCalculator/IncomeAndExpensesFields.svelte';
-	import MileageAndHomeFields from '$lib/components/taxCalculator/MileageAndHomeFields.svelte';
-	import TaxCalculatorDisclaimer from '$lib/components/taxCalculator/TaxCalculatorDisclaimer.svelte';
-	import TaxCalculatorIntro from '$lib/components/taxCalculator/TaxCalculatorIntro.svelte';
-	import TaxEstimateResult from '$lib/components/taxCalculator/TaxEstimateResult.svelte';
-	import YearAndStatusFields from '$lib/components/taxCalculator/YearAndStatusFields.svelte';
-	import { announcementOf } from '$lib/data/taxCalculator/estimateHeadline';
+	import { TakeHomeCalculatorPage } from '$lib/client/takeHomeCalculatorPage.svelte';
+	import { observeVisibility } from '$lib/client/visibility';
+	import BiggerPictureSection from '$lib/components/taxCalculator/BiggerPictureSection.svelte';
+	import CalculatorHero from '$lib/components/taxCalculator/CalculatorHero.svelte';
+	import CalculatorSubNavigation from '$lib/components/taxCalculator/CalculatorSubNavigation.svelte';
+	import ClosingStrip from '$lib/components/taxCalculator/ClosingStrip.svelte';
+	import ComparisonsSection from '$lib/components/taxCalculator/ComparisonsSection.svelte';
+	import EarningsForm from '$lib/components/taxCalculator/EarningsForm.svelte';
+	import EmptyTakeHome from '$lib/components/taxCalculator/EmptyTakeHome.svelte';
+	import EveryPoundSection from '$lib/components/taxCalculator/EveryPoundSection.svelte';
+	import HowItWorksSection from '$lib/components/taxCalculator/HowItWorksSection.svelte';
+	import MobileTakeHomeBar from '$lib/components/taxCalculator/MobileTakeHomeBar.svelte';
+	import SectionHeading from '$lib/components/taxCalculator/SectionHeading.svelte';
+	import SelfAssessmentSection from '$lib/components/taxCalculator/SelfAssessmentSection.svelte';
+	import TakeHomeActions from '$lib/components/taxCalculator/TakeHomeActions.svelte';
+	import TakeHomeCard from '$lib/components/taxCalculator/TakeHomeCard.svelte';
+	import TakeHomePanel from '$lib/components/taxCalculator/TakeHomePanel.svelte';
+	import TakeHomePageHead from '$lib/components/taxCalculator/TakeHomePageHead.svelte';
+	import TaxYearSelect from '$lib/components/taxCalculator/TaxYearSelect.svelte';
 	import { rulesFor } from '$lib/data/taxCalculator/taxYearRules';
 
-	const form = new TaxCalculatorForm();
+	const page = new TakeHomeCalculatorPage();
+	const form = page.form;
 	const estimate = $derived(form.estimate);
-	let hasRecalledThisVisit = $state(false);
+	const bill = $derived(estimate?.selfAssessment ?? null);
+	const laterStepNumber = $derived(bill ? 5 : 4);
+	let takeHomePanel = $state<HTMLElement>();
+	let isTakeHomePanelVisible = $state(true);
 
-	onMount(() => {
-		form.restore(recallFromThisVisit());
-		hasRecalledThisVisit = true;
-	});
-
-	$effect(() => {
-		const remembered = form.remembered();
-		if (hasRecalledThisVisit) saveForThisVisit(remembered);
-	});
+	onMount(() => page.recall());
+	$effect(() => page.rememberForThisVisit());
+	$effect(() => (takeHomePanel ? observeVisibility(takeHomePanel, (isVisible) => (isTakeHomePanelVisible = isVisible)) : undefined));
 </script>
 
-<svelte:head>
-	<title>Self-employed tax calculator — Your Books Today</title>
-	<meta
-		name="description"
-		content="Free UK tax calculator for sole traders and CIS subcontractors. Estimate your income tax, Class 4 National Insurance, CIS refund and payment dates for 2025/26 and 2026/27."
-	/>
-</svelte:head>
+<TakeHomePageHead {estimate} />
+<CalculatorSubNavigation comparisonCount={page.savedComparisons.comparisons.length} />
 
-<div class="mx-auto flex max-w-6xl flex-col gap-10 px-4 py-12 sm:px-6 md:py-16">
-	<TaxCalculatorIntro />
-	<noscript>
-		<p class="rounded-xl border border-caution/40 p-4">This calculator needs JavaScript switched on.</p>
-	</noscript>
-	<div class="grid grid-cols-[minmax(0,1fr)] items-start gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
-		<form class="flex min-w-0 flex-col gap-4" onsubmit={(event) => event.preventDefault()} novalidate>
-			<YearAndStatusFields {form} />
-			<IncomeAndExpensesFields {form} />
-			<MileageAndHomeFields {form} />
-		</form>
-		<section aria-label="Your estimate">
-			<p class="sr-only" aria-live="polite">{announcementOf(estimate)}</p>
-			{#if estimate}
-				<TaxEstimateResult {estimate} />
-			{:else}
-				<EmptyEstimatePrompt />
-			{/if}
-		</section>
-	</div>
-	<TaxCalculatorDisclaimer verifiedOn={rulesFor(form.taxYear).verifiedOn} />
+<div class="mx-auto flex max-w-6xl flex-col gap-16 px-4 py-10 sm:px-6 md:gap-24 md:py-16">
+	<CalculatorHero />
+	<section id="calculator" class="flex scroll-mt-16 flex-col gap-6" aria-label="Take-home calculator">
+		<SectionHeading stepNumber={1} eyebrow="Let’s start with you">
+			{#snippet aside()}<TaxYearSelect bind:taxYear={form.taxYear} />{/snippet}
+		</SectionHeading>
+		<div class="grid grid-cols-[minmax(0,1fr)] items-start gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+			<EarningsForm {form} />
+			<TakeHomePanel bind:element={takeHomePanel}>
+				{#if estimate}
+					<TakeHomeCard {estimate} bind:period={page.period}>
+						{#snippet actions()}
+							<TakeHomeActions onSave={() => page.saveComparison()} onExport={() => page.exportEstimate()} />
+						{/snippet}
+					</TakeHomeCard>
+				{:else}
+					<EmptyTakeHome />
+				{/if}
+			</TakeHomePanel>
+		</div>
+	</section>
+	{#if estimate}
+		<BiggerPictureSection {estimate} bind:extraIncome={page.extraIncome} bind:livingCosts={page.livingCosts} />
+		<EveryPoundSection {estimate} period={page.period} />
+		{#if bill}<SelfAssessmentSection stepNumber={4} {estimate} {bill} />{/if}
+	{/if}
+	<ComparisonsSection
+		stepNumber={laterStepNumber}
+		comparisons={page.savedComparisons.comparisons}
+		currentTakeHome={estimate?.takeHome ?? null}
+		onLoad={(comparison) => page.loadComparison(comparison)}
+		onRemove={(comparison) => page.savedComparisons.remove(comparison.id)}
+	/>
+	<HowItWorksSection stepNumber={laterStepNumber + 1} rules={rulesFor(form.taxYear)} />
+	<ClosingStrip canExport={estimate !== null} onExport={() => page.exportEstimate()} />
 </div>
+
+{#if estimate}
+	<MobileTakeHomeBar takeHome={estimate.takeHome} isVisible={!isTakeHomePanelVisible} />
+{/if}

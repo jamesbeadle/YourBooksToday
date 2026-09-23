@@ -1,6 +1,7 @@
 import { roundToPence } from '$lib/data/accounting/money';
+import type { SelfAssessmentBill } from './selfAssessmentBill';
 import { paymentsOnAccountRules } from './sharedRules';
-import type { TaxEstimate } from './taxEstimate';
+import type { TaxYearRules } from './taxRuleTypes';
 
 export type PaymentsOnAccount = {
 	eachPayment: number;
@@ -10,20 +11,21 @@ export type PaymentsOnAccount = {
 
 const numberOfPaymentsOnAccount = 2;
 
-export function paymentsOnAccountFor(estimate: TaxEstimate): PaymentsOnAccount | null {
-	if (!isAskedForPaymentsOnAccount(estimate)) return null;
+export function paymentsOnAccountFor(bill: SelfAssessmentBill, rules: TaxYearRules): PaymentsOnAccount | null {
+	const relevantAmount = roundToPence(bill.incomeTax + bill.class4 - bill.cisDeductions);
+	if (bill.outcome !== 'taxDue') return null;
+	if (relevantAmount < paymentsOnAccountRules.smallestBillThatNeedsThem) return null;
+	if (isMostlyCollectedAtSource(bill)) return null;
 	return {
-		eachPayment: roundToPence(estimate.balanceDue / numberOfPaymentsOnAccount),
-		firstDueOn: estimate.rules.balancingPaymentDueOn,
-		secondDueOn: estimate.rules.secondPaymentOnAccountDueOn
+		eachPayment: roundToPence(relevantAmount / numberOfPaymentsOnAccount),
+		firstDueOn: rules.balancingPaymentDueOn,
+		secondDueOn: rules.secondPaymentOnAccountDueOn
 	};
 }
 
-function isAskedForPaymentsOnAccount(estimate: TaxEstimate): boolean {
-	if (estimate.outcome !== 'taxDue') return false;
-	if (estimate.balanceDue < paymentsOnAccountRules.smallestBillThatNeedsThem) return false;
-	const exemptingDeductions = roundToPence(
-		estimate.taxAndNationalInsurance * paymentsOnAccountRules.shareCollectedAtSourceThatExempts
+function isMostlyCollectedAtSource(bill: SelfAssessmentBill): boolean {
+	const exemptingAmount = roundToPence(
+		bill.incomeTaxAndClass4 * paymentsOnAccountRules.shareCollectedAtSourceThatExempts
 	);
-	return estimate.inputs.annualCisDeductions < exemptingDeductions;
+	return bill.taxCollectedAtSource >= exemptingAmount;
 }

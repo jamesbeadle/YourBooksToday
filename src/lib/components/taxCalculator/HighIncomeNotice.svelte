@@ -1,19 +1,12 @@
 <script lang="ts">
-	import InfoPanel from './InfoPanel.svelte';
-
 	let { isAllowanceTapered }: { isAllowanceTapered: boolean } = $props();
-
-	const reason = $derived(
-		isAllowanceTapered
-			? 'your personal allowance is being tapered and you are paying higher-rate tax'
-			: 'you are paying higher-rate tax'
-	);
 </script>
 
-<InfoPanel heading="Your situation has more moving parts than this estimate covers" tone="caution">
+<aside class="flex flex-col gap-2 rounded-3xl border border-caution/30 bg-caution/5 p-6 text-sm text-chalk/75">
+	<h3 class="font-display text-lg font-medium text-chalk">More moving parts than this estimate covers</h3>
 	<p>
-		Because {reason}, things like pension contributions, payments on account, dividends, rental income
-		or capital allowances can change the figure a lot. It’s worth speaking to an accountant before
-		relying on it.
+		Because you pay higher-rate tax{isAllowanceTapered ? ' and your personal allowance is being tapered' : ''}, things
+		like salary sacrifice, dividends, rental income or Gift Aid can shift the figure a lot. Worth a word with an
+		accountant before you rely on it.
 	</p>
-</InfoPanel>
+</aside>

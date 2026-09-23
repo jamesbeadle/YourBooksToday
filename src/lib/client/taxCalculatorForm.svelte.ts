@@ -1,77 +1,75 @@
-import { estimateTax, type TaxEstimate } from '$lib/data/taxCalculator/taxEstimate';
-import type { TaxEstimateInputs, TradingStatus, VehicleType } from '$lib/data/taxCalculator/taxEstimateInputs';
-import { currentTaxYear, type HomeWorkingBand, type TaxYearName } from '$lib/data/taxCalculator/taxYearRules';
-import { PeriodAmount, type RememberedPeriodAmount } from './periodAmount.svelte';
+import { estimateTakeHome, type TakeHomeEstimate } from '$lib/data/taxCalculator/takeHomeEstimate';
+import type { EarningType, TakeHomeInputs, TradingStatus, VehicleType } from '$lib/data/taxCalculator/takeHomeInputs';
+import { currentTaxYear } from '$lib/data/taxCalculator/taxYearRules';
+import type { HomeWorkingBand, TaxRegion, TaxYearName, UndergraduateLoanPlan } from '$lib/data/taxCalculator/taxRuleTypes';
+import { PeriodAmount } from './periodAmount.svelte';
 
-export type RememberedTaxCalculatorForm = {
-	taxYear: TaxYearName;
-	tradingStatus: TradingStatus;
-	income: RememberedPeriodAmount;
-	expenses: RememberedPeriodAmount;
-	cisDeductions: RememberedPeriodAmount;
-	businessMiles: RememberedPeriodAmount;
-	vehicleType: VehicleType;
-	homeWorkingBand: HomeWorkingBand;
-};
+const exampleSalary = 45000;
 
 export class TaxCalculatorForm {
 	taxYear = $state<TaxYearName>(currentTaxYear(new Date()));
-	tradingStatus = $state<TradingStatus>('soleTrader');
-	income = new PeriodAmount();
+	taxRegion = $state<TaxRegion>('restOfUk');
+	earningType = $state<EarningType>('employed');
+	salary = new PeriodAmount(exampleSalary);
+	bonus = new PeriodAmount();
+	selfEmploymentIncome = new PeriodAmount();
 	expenses = new PeriodAmount();
 	cisDeductions = new PeriodAmount();
 	businessMiles = new PeriodAmount();
+	tradingStatus = $state<TradingStatus>('soleTrader');
 	vehicleType = $state<VehicleType>('none');
 	homeWorkingBand = $state<HomeWorkingBand>('under25Hours');
+	pensionPercentage = $state<number | null>(null);
+	undergraduatePlan = $state<UndergraduateLoanPlan | null>(null);
+	hasPostgraduateLoan = $state(false);
 
-	get isCisSubcontractor(): boolean {
-		return this.tradingStatus === 'cisSubcontractor';
+	get isEmployed(): boolean {
+		return this.earningType !== 'selfEmployed';
 	}
 
-	get hasErrors(): boolean {
-		const amounts = [this.income, this.expenses, this.cisDeductions, this.businessMiles];
-		return amounts.some((periodAmount) => periodAmount.errorMessage !== null);
+	get isSelfEmployed(): boolean {
+		return this.earningType !== 'employed';
 	}
 
-	get inputs(): TaxEstimateInputs {
+	get amounts(): PeriodAmount[] {
+		return [this.salary, this.bonus, this.selfEmploymentIncome, this.expenses, this.cisDeductions, this.businessMiles];
+	}
+
+	get hasIncome(): boolean {
+		const hasPay = this.isEmployed && this.salary.hasAmount;
+		return hasPay || (this.isSelfEmployed && this.selfEmploymentIncome.hasAmount);
+	}
+
+	get inputs(): TakeHomeInputs {
 		return {
 			taxYear: this.taxYear,
-			tradingStatus: this.tradingStatus,
-			annualIncome: this.income.annualAmount,
-			annualExpenses: this.expenses.annualAmount,
-			annualCisDeductions: this.isCisSubcontractor ? this.cisDeductions.annualAmount : 0,
-			annualBusinessMiles: this.businessMiles.annualAmount,
-			vehicleType: this.vehicleType,
-			homeWorkingBand: this.homeWorkingBand
+			taxRegion: this.taxRegion,
+			earningType: this.earningType,
+			annualSalary: this.salary.annualAmount,
+			annualBonus: this.bonus.annualAmount,
+			pensionPercentage: Math.min(100, Math.max(0, this.pensionPercentage ?? 0)),
+			studentLoans: { undergraduatePlan: this.undergraduatePlan, hasPostgraduateLoan: this.hasPostgraduateLoan },
+			selfEmployment: {
+				tradingStatus: this.tradingStatus,
+				annualIncome: this.selfEmploymentIncome.annualAmount,
+				annualExpenses: this.expenses.annualAmount,
+				annualCisDeductions: this.cisDeductions.annualAmount,
+				annualBusinessMiles: this.businessMiles.annualAmount,
+				vehicleType: this.vehicleType,
+				homeWorkingBand: this.homeWorkingBand
+			}
 		};
 	}
 
-	get estimate(): TaxEstimate | null {
-		if (!this.income.hasAmount || this.hasErrors) return null;
-		return estimateTax(this.inputs);
+	get estimate(): TakeHomeEstimate | null {
+		const hasErrors = this.amounts.some((periodAmount) => periodAmount.errorMessage !== null);
+		if (hasErrors || !this.hasIncome) return null;
+		return estimateTakeHome(this.inputs);
 	}
 
-	remembered(): RememberedTaxCalculatorForm {
-		return {
-			taxYear: this.taxYear,
-			tradingStatus: this.tradingStatus,
-			income: this.income.remembered(),
-			expenses: this.expenses.remembered(),
-			cisDeductions: this.cisDeductions.remembered(),
-			businessMiles: this.businessMiles.remembered(),
-			vehicleType: this.vehicleType,
-			homeWorkingBand: this.homeWorkingBand
-		};
-	}
-
-	restore(remembered: Partial<RememberedTaxCalculatorForm>): void {
-		this.taxYear = remembered.taxYear ?? this.taxYear;
-		this.tradingStatus = remembered.tradingStatus ?? this.tradingStatus;
-		this.income.restore(remembered.income);
-		this.expenses.restore(remembered.expenses);
-		this.cisDeductions.restore(remembered.cisDeductions);
-		this.businessMiles.restore(remembered.businessMiles);
-		this.vehicleType = remembered.vehicleType ?? this.vehicleType;
-		this.homeWorkingBand = remembered.homeWorkingBand ?? this.homeWorkingBand;
+	chooseEarningType(earningType: EarningType): void {
+		const isFirstTimeSelfEmployed = earningType === 'selfEmployed' && !this.selfEmploymentIncome.hasAmount;
+		if (isFirstTimeSelfEmployed) this.selfEmploymentIncome.copyFrom(this.salary);
+		this.earningType = earningType;
 	}
 }

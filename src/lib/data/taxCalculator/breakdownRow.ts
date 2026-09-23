@@ -7,9 +7,13 @@ export type BreakdownRow = {
 };
 
 export type BreakdownScale = {
-	isQuarterly: boolean;
+	isYearly: boolean;
 	of: (annualAmount: number) => number;
 };
+
+export function scaleFor(periodsPerYear: number): BreakdownScale {
+	return { isYearly: periodsPerYear === 1, of: (annualAmount) => annualAmount / periodsPerYear };
+}
 
 export function line(label: string, amount: string): BreakdownRow {
 	return { label, amount, kind: 'line' };

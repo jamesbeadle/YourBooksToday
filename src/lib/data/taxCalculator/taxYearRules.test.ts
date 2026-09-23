@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { earliestMakingTaxDigitalRules, paymentsOnAccountRules } from './sharedRules';
+import { earliestMakingTaxDigitalRules, paymentsOnAccountRules, pensionReliefSourceUrl } from './sharedRules';
 import { currentTaxYear, taxYearNames, taxYearRules } from './taxYearRules';
 
 const govUkPage = /^https:\/\/www\.gov\.uk\//;
@@ -9,8 +9,8 @@ describe('taxYearRules', () => {
 		const rules = taxYearRules[taxYear];
 		const ruleGroups = [
 			rules.incomeTax,
-			rules.class4,
-			rules.class2,
+			rules.nationalInsurance,
+			rules.studentLoans,
 			rules.mileage,
 			rules.homeWorking,
 			rules.makingTaxDigital
@@ -19,8 +19,14 @@ describe('taxYearRules', () => {
 	});
 
 	it('cites gov.uk for the rules shared across years', () => {
-		expect(paymentsOnAccountRules.sourceUrl).toMatch(govUkPage);
-		expect(earliestMakingTaxDigitalRules.sourceUrl).toMatch(govUkPage);
+		[paymentsOnAccountRules.sourceUrl, earliestMakingTaxDigitalRules.sourceUrl, pensionReliefSourceUrl].forEach(
+			(sourceUrl) => expect(sourceUrl).toMatch(govUkPage)
+		);
+	});
+
+	it('only lets Plan 5 repay from 2026/27, when repayments start', () => {
+		expect(taxYearRules['2025/26'].studentLoans.undergraduatePlans.plan5).toBeUndefined();
+		expect(taxYearRules['2026/27'].studentLoans.undergraduatePlans.plan5?.threshold).toBe(25000);
 	});
 });
 

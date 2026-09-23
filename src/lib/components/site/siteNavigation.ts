@@ -9,6 +9,7 @@ export type NavigationAccess = {
 
 export const primaryNavigationLinks: NavigationLink[] = [
 	{ href: '/', label: 'Home' },
+	{ href: '/tax-calculator', label: 'Tax calculator' },
 	{ href: '/contact', label: 'Contact' }
 ];
 

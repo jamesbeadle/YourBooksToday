@@ -18,6 +18,9 @@
 			</a>
 		</div>
 		<div class="flex flex-wrap items-center gap-6">
+			<a href="/tax-calculator" class="text-sm text-chalk/60 transition hover:text-chalk">
+				Tax calculator
+			</a>
 			<a href="/contact" class="text-sm text-chalk/60 transition hover:text-chalk">Contact</a>
 			<a href="/terms" class="text-sm text-chalk/60 transition hover:text-chalk">
 				Terms of service
